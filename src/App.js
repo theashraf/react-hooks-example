@@ -1,24 +1,35 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import Form from "./Form";
+import "./App.css";
 
 function App() {
+  const [todos, setTodos] = useState([]);
+
+  const toggleTodo = index => {
+    setTodos(
+      todos.map((todo, i) =>
+        i === index ? { ...todo, completed: !todo.completed } : todo
+      )
+    );
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+      <Form
+        onSubmit={value => setTodos([...todos, { value, completed: false }])}
+      />
+      {todos.map(({ value, completed }, i) => (
+        <div
+          key={value + "-" + Math.random()}
+          onClick={() => toggleTodo(i)}
+          style={{
+            textDecoration: completed ? "line-through" : ""
+          }}
         >
-          Learn React
-        </a>
-      </header>
+          {value}
+        </div>
+      ))}
+      <button onClick={() => setTodos([])}>Reset</button>
     </div>
   );
 }
